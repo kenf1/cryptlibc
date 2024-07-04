@@ -3,11 +3,12 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-#define MAX_LENGTH 50 //max num chars allowed
-#define REF_STRING "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+//max num chars allowed
+#define MAX_LENGTH 50
+#define REF_STRING "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
 
 void promptUser(char *inputStr,int max_length);
-char* cryptlogic(const char *inputStr,const char *refStr,int offset);
+char* cryptlogic(const char *action,const char *inputStr,const char *refStr,int offset);
 
 int main(){
     //get string to encrypt
@@ -15,11 +16,13 @@ int main(){
     promptUser(input,MAX_LENGTH);
 
     //encrypt
-    char *encryptStr = cryptlogic(input,REF_STRING,1);
+    char *encryptStr = cryptlogic("encrypt",input,REF_STRING,1);
     printf("Encrypted output: %s\n",encryptStr);
 
-    //free up memory
-    free(encryptStr);
+    //free up memory (only if cryptlogic does not return "Error")
+    if(strcmp(encryptStr,"Error") != 0){
+        free(encryptStr);
+    }
 
     return 0;
 }
@@ -35,13 +38,15 @@ void promptUser(char *inputStr,int max_length){
 }
 
 //backend logic
-char* cryptlogic(const char *inputStr,const char *refStr,int offset){
+char* cryptlogic(const char *action,const char *inputStr,const char *refStr,int offset){
     int i;
     int ref_len = strlen(refStr);
     int input_len = strlen(inputStr);
 
-    //allocate memory on heap for new string
-    //+1 for `\n` char, sizeof to return in bytes
+    /*
+        allocate memory on heap for new string
+            +1 for `\n` char, sizeof to return in bytes
+    */
     char *result = (char*)malloc((input_len + 1) * sizeof(char));
     if(result == NULL){
         printf("Memory allocation failed\n");
@@ -50,9 +55,14 @@ char* cryptlogic(const char *inputStr,const char *refStr,int offset){
 
     //loop over each char in string
     for(i = 0;inputStr[i] != '\0';i++){
-        if(isalpha(inputStr[i])){
-            char upper_char = toupper(inputStr[i]);
-            int index = strchr(refStr,upper_char) - refStr;
+        char upper_char = toupper(inputStr[i]);
+        int index = strchr(refStr,upper_char) - refStr;
+
+        /*
+            used strcmp (C) instead of action == "encrypt" (C++)
+                incorrect comparison compares memory address, not content
+        */
+        if(strcmp(action,"encrypt") == 0){
             //loop if overflow
             int new_index = (index + offset) % ref_len;
 
@@ -62,12 +72,28 @@ char* cryptlogic(const char *inputStr,const char *refStr,int offset){
             }else{
                 result[i] = tolower(refStr[new_index]);
             }
-        }else{
-            //char not in REF_STRING = return as is
-            result[i] = inputStr[i];
+        }
+
+        if(strcmp(action,"decrypt") == 0){
+            //loop if overflow
+            int new_index = (index - offset) % ref_len;
+
+            //preserve upper & lower case
+            if(isupper(inputStr[i])){
+                result[i] = refStr[new_index];
+            }else{
+                result[i] = tolower(refStr[new_index]);
+            }
+        }
+
+        //catch all other edge cases
+        if(strcmp(action,"encrypt") != 0 && strcmp(action,"decrypt") != 0){
+            printf("Options are encrypt or decrypt\n");
+            return "Error";
         }
     }
 
+    //add null terminator (end of string)
     result[i] = '\0';
 
     return result;
