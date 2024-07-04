@@ -5,7 +5,7 @@
 
 //max num chars allowed
 #define MAX_LENGTH 50
-#define REF_STRING "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+#define REF_STRING "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
 
 void promptUser(char *inputStr,int max_length);
 char* cryptlogic(const char *action,const char *inputStr,const char *refStr,int offset);
@@ -55,51 +55,45 @@ char* cryptlogic(const char *action,const char *inputStr,const char *refStr,int 
 
     //loop over each char in string
     for(i = 0;inputStr[i] != '\0';i++){
-        //char
-        if(isalpha(inputStr[i])){
-            char upper_char = toupper(inputStr[i]);
-            int index = strchr(refStr,upper_char) - refStr;
+        char upper_char = toupper(inputStr[i]);
+        int index = strchr(refStr,upper_char) - refStr;
 
-            /*
-                used strcmp (C) instead of action == "encrypt" (C++)
-                    incorrect comparison compares memory address, not content
-            */
-            if(strcmp(action,"encrypt") == 0){
-                //loop if overflow
-                int new_index = (index + offset) % ref_len;
+        /*
+            used strcmp (C) instead of action == "encrypt" (C++)
+                incorrect comparison compares memory address, not content
+        */
+        if(strcmp(action,"encrypt") == 0){
+            //loop if overflow
+            int new_index = (index + offset) % ref_len;
 
-                //preserve upper & lower case
-                if(isupper(inputStr[i])){
-                    result[i] = refStr[new_index];
-                }else{
-                    result[i] = tolower(refStr[new_index]);
-                }
+            //preserve upper & lower case
+            if(isupper(inputStr[i])){
+                result[i] = refStr[new_index];
+            }else{
+                result[i] = tolower(refStr[new_index]);
             }
+        }
 
-            if(strcmp(action,"decrypt") == 0){
-                //loop if overflow
-                int new_index = (index - offset) % ref_len;
+        if(strcmp(action,"decrypt") == 0){
+            //loop if overflow
+            int new_index = (index - offset) % ref_len;
 
-                //preserve upper & lower case
-                if(isupper(inputStr[i])){
-                    result[i] = refStr[new_index];
-                }else{
-                    result[i] = tolower(refStr[new_index]);
-                }
+            //preserve upper & lower case
+            if(isupper(inputStr[i])){
+                result[i] = refStr[new_index];
+            }else{
+                result[i] = tolower(refStr[new_index]);
             }
+        }
 
-            //catch all other edge cases
-            if(strcmp(action,"encrypt") != 0 && strcmp(action,"decrypt") != 0){
-                printf("Options are encrypt or decrypt\n");
-                return "Error";
-            }
-
-        }else{
-            //int + symbols
-            result[i] = inputStr[i];
+        //catch all other edge cases
+        if(strcmp(action,"encrypt") != 0 && strcmp(action,"decrypt") != 0){
+            printf("Options are encrypt or decrypt\n");
+            return "Error";
         }
     }
 
+    //add null terminator (end of string)
     result[i] = '\0';
 
     return result;
