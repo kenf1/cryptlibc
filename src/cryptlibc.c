@@ -1,100 +1,58 @@
-#include <stdio.h>
+// #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
 
-//max num chars allowed
-#define MAX_LENGTH 50
-#define REF_STRING "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+//backend logic (encrypt only)
+char* cryptlogic(const char* inputstr,const char* refstr,int offset){
+    int input_len = strlen(inputstr);
+    int ref_len = strlen(refstr);
+    char* result = (char*)malloc(input_len + 1);
 
-void promptUser(char *inputStr,int max_length);
-char* cryptlogic(const char *action,const char *inputStr,const char *refStr,int offset);
-
-int main(){
-    //get string to encrypt
-    char input[MAX_LENGTH];
-    promptUser(input,MAX_LENGTH);
-
-    //encrypt
-    char *encryptStr = cryptlogic("encrypt",input,REF_STRING,1);
-    printf("Encrypted output: %s\n",encryptStr);
-
-    //free up memory (only if cryptlogic does not return "Error")
-    if(strcmp(encryptStr,"Error") != 0){
-        free(encryptStr);
+    //unable to allocate memory
+    if(!result){
+        return NULL;
     }
 
-    return 0;
-}
+    //loop over each char in inputstr
+    for(int i = 0;i < input_len;i++){
+        char c = inputstr[i];
+        if(isalpha(c)){
+            int base = isupper(c) ? 'A' : 'a';
+            int ref_index = -1;
 
-//prompt user for string to encrypt
-void promptUser(char *inputStr,int max_length){
-    //readline
-    printf("Enter text to encrypt: ");
-    fgets(inputStr,max_length,stdin);
-
-    //rm \n if present
-    inputStr[strcspn(inputStr,"\n")] = '\0';
-}
-
-//backend logic
-char* cryptlogic(const char *action,const char *inputStr,const char *refStr,int offset){
-    int i;
-    int ref_len = strlen(refStr);
-    int input_len = strlen(inputStr);
-
-    /*
-        allocate memory on heap for new string
-            +1 for `\n` char, sizeof to return in bytes
-    */
-    char *result = (char*)malloc((input_len + 1) * sizeof(char));
-    if(result == NULL){
-        printf("Memory allocation failed\n");
-        exit(1);
-    }
-
-    //loop over each char in string
-    for(i = 0;inputStr[i] != '\0';i++){
-        char upper_char = toupper(inputStr[i]);
-        int index = strchr(refStr,upper_char) - refStr;
-
-        /*
-            used strcmp (C) instead of action == "encrypt" (C++)
-                incorrect comparison compares memory address, not content
-        */
-        if(strcmp(action,"encrypt") == 0){
-            //loop if overflow
-            int new_index = (index + offset) % ref_len;
-
-            //preserve upper & lower case
-            if(isupper(inputStr[i])){
-                result[i] = refStr[new_index];
-            }else{
-                result[i] = tolower(refStr[new_index]);
+            //index of char in refstr
+            for(int j = 0;j < ref_len;j++){
+                if(tolower(refstr[j]) == tolower(c)){
+                    ref_index = j;
+                    break;
+                }
             }
-        }
 
-        if(strcmp(action,"decrypt") == 0){
             //loop if overflow
-            int new_index = (index - offset) % ref_len;
-
-            //preserve upper & lower case
-            if(isupper(inputStr[i])){
-                result[i] = refStr[new_index];
+            if(ref_index != -1){
+                int shift = (offset + ref_index) % 26;
+                result[i] = (char)((c - base + shift + 26) % 26 + base);
             }else{
-                result[i] = tolower(refStr[new_index]);
+                result[i] = c;
             }
-        }
-
-        //catch all other edge cases
-        if(strcmp(action,"encrypt") != 0 && strcmp(action,"decrypt") != 0){
-            printf("Options are encrypt or decrypt\n");
-            return "Error";
+        }else{
+            result[i] = c;
         }
     }
 
-    //add null terminator (end of string)
-    result[i] = '\0';
-
+    //end of string
+    result[input_len] = '\0';
     return result;
 }
+
+// int main(){
+//     const char* input = "Hello, World!";
+//     const char* reference = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+//     int offset = 1;
+
+//     char* result = shift_string(input,reference,offset);
+//     printf("Shifted: %s\n",result);
+
+//     return 0;
+// }

@@ -1,0 +1,10 @@
+[package]
+name = "rsver"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cc = "1.0.104"
+
+[build-dependencies]
+cc = "1.0.104"
