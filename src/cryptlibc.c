@@ -26,10 +26,11 @@ int main(){
 
 //prompt user for string to encrypt
 void promptUser(char *inputStr,int max_length){
+    //readline
     printf("Enter text to encrypt: ");
     fgets(inputStr,max_length,stdin);
 
-    //rm \n (if present)
+    //rm \n if present
     inputStr[strcspn(inputStr,"\n")] = '\0';
 }
 
@@ -39,7 +40,8 @@ char* cryptlogic(const char *inputStr,const char *refStr,int offset){
     int ref_len = strlen(refStr);
     int input_len = strlen(inputStr);
 
-    //allocate memory on heap for new string (+1 for `\n` char, sizeof to return in bytes)
+    //allocate memory on heap for new string
+    //+1 for `\n` char, sizeof to return in bytes
     char *result = (char*)malloc((input_len + 1) * sizeof(char));
     if(result == NULL){
         printf("Memory allocation failed\n");
@@ -51,6 +53,7 @@ char* cryptlogic(const char *inputStr,const char *refStr,int offset){
         if(isalpha(inputStr[i])){
             char upper_char = toupper(inputStr[i]);
             int index = strchr(refStr,upper_char) - refStr;
+            //loop if overflow
             int new_index = (index + offset) % ref_len;
 
             //preserve upper & lower case
@@ -60,7 +63,7 @@ char* cryptlogic(const char *inputStr,const char *refStr,int offset){
                 result[i] = tolower(refStr[new_index]);
             }
         }else{
-            //char not in REF_STRING return as is
+            //char not in REF_STRING = return as is
             result[i] = inputStr[i];
         }
     }
