@@ -7,7 +7,7 @@
 #define REF_STRING "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 void promptUser(char *inputStr,int max_length);
-char* cryptlogic(const char *inputStr,const char *refStr,int offset);
+char* cryptlogic(const char *action,const char *inputStr,const char *refStr,int offset);
 
 int main(){
     //get string to encrypt
@@ -15,7 +15,7 @@ int main(){
     promptUser(input,MAX_LENGTH);
 
     //encrypt
-    char *encryptStr = cryptlogic(input,REF_STRING,1);
+    char *encryptStr = cryptlogic("encrypt",input,REF_STRING,1);
     printf("Encrypted output: %s\n",encryptStr);
 
     //free up memory
@@ -35,7 +35,7 @@ void promptUser(char *inputStr,int max_length){
 }
 
 //backend logic
-char* cryptlogic(const char *inputStr,const char *refStr,int offset){
+char* cryptlogic(const char *action,const char *inputStr,const char *refStr,int offset){
     int i;
     int ref_len = strlen(refStr);
     int input_len = strlen(inputStr);
@@ -53,15 +53,40 @@ char* cryptlogic(const char *inputStr,const char *refStr,int offset){
         if(isalpha(inputStr[i])){
             char upper_char = toupper(inputStr[i]);
             int index = strchr(refStr,upper_char) - refStr;
-            //loop if overflow
-            int new_index = (index + offset) % ref_len;
 
-            //preserve upper & lower case
-            if(isupper(inputStr[i])){
-                result[i] = refStr[new_index];
-            }else{
-                result[i] = tolower(refStr[new_index]);
+            /*
+                used strcmp (C) instead of action == "encrypt" (C++)
+                    incorrect comparison compares memory address, not content
+            */
+            if(strcmp(action,"encrypt") == 0){
+                //loop if overflow
+                int new_index = (index + offset) % ref_len;
+
+                //preserve upper & lower case
+                if(isupper(inputStr[i])){
+                    result[i] = refStr[new_index];
+                }else{
+                    result[i] = tolower(refStr[new_index]);
+                }
             }
+
+            if(strcmp(action,"decrypt") == 0){
+                //loop if overflow
+                int new_index = (index - offset) % ref_len;
+
+                //preserve upper & lower case
+                if(isupper(inputStr[i])){
+                    result[i] = refStr[new_index];
+                }else{
+                    result[i] = tolower(refStr[new_index]);
+                }
+            }
+
+            if(strcmp(action,"encrypt") != 0 && strcmp(action,"decrypt") != 0){
+                printf("Options are encrypt or decrypt\n");
+                break;
+            }
+
         }else{
             //char not in REF_STRING = return as is
             result[i] = inputStr[i];
