@@ -10,17 +10,8 @@ A C library for basic string encryption/decryption. C main binary compiled with 
 ### Bindings
 
 - Rust
+- Zig
 
 ### Instructions
 
-Run Rust version
-
-```{bash}
-make rsbind
-```
-
-Compile using Zig CLI
-
-```{bash}
-make zigcc
-```
+See `Makefile` for list of commands. Run in terminal with: `make COMMAND`
