@@ -24,3 +24,6 @@ Dev/
 !/src/*.c
 !/src/*.h
 .env
+.github/
+build.zig.zon
+.zig-cache/
