@@ -30,8 +30,8 @@ char* cryptlogic(const char* inputstr,const char* refstr,int offset){
 
             //loop if overflow
             if(ref_index != -1){
-                int shift = (offset + ref_index) % 26;
-                result[i] = (char)((c - base + shift + 26) % 26 + base);
+                int shift = (c - base + offset) % 26;
+                result[i] = (char)(shift + base);
             }else{
                 result[i] = c;
             }

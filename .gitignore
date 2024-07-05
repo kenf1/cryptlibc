@@ -25,5 +25,8 @@ Dev/
 !/src/*.h
 .env
 .github/
+
 build.zig.zon
 .zig-cache/
+build.zig
+zigver/main.o
