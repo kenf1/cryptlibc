@@ -1,6 +1,6 @@
 ## cryptlibc
 
-A C library for basic string encryption/decryption.
+A C library for basic string encryption/decryption. C main binary compiled with [Zig](https://ziglang.org/).
 
 <br>
 
@@ -17,4 +17,10 @@ Run Rust version
 
 ```{bash}
 make rsbind
+```
+
+Compile using Zig CLI
+
+```{bash}
+make zigcc
 ```

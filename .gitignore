@@ -22,3 +22,5 @@ Dev/
 .DS_Store
 /src/*
 !/src/*.c
+!/src/*.h
+.env

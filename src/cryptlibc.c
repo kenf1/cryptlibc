@@ -1,4 +1,3 @@
-// #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -45,14 +44,3 @@ char* cryptlogic(const char* inputstr,const char* refstr,int offset){
     result[input_len] = '\0';
     return result;
 }
-
-// int main(){
-//     const char* input = "Hello, World!";
-//     const char* reference = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-//     int offset = 1;
-
-//     char* result = shift_string(input,reference,offset);
-//     printf("Shifted: %s\n",result);
-
-//     return 0;
-// }

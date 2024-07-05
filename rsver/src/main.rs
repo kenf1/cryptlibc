@@ -1,7 +1,9 @@
 use std::{
     ffi::{c_char,c_int,CStr,CString},
     ptr,
+    env,
 };
+use dotenv::dotenv;
 
 extern "C"{
     fn cryptlogic(
@@ -12,12 +14,17 @@ extern "C"{
 }
 
 fn main(){
+    //import KEY from .env
+    dotenv().ok();
+    let key = env::var("KEY")
+        .unwrap();
+
     let inputstr = CString::new("Hello from C!").unwrap();
-    let refstr = CString::new("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890").unwrap();
+    let refstr = CString::new(& *key).unwrap(); //dereference
     let offset = 2;
 
     unsafe{
-        //pass args into C function
+        //pass args into C function (encrypt only)
         let result_ptr = cryptlogic(
             inputstr.as_ptr(),
             refstr.as_ptr(),
@@ -30,6 +37,9 @@ fn main(){
                 .to_string_lossy()
                 .into_owned();
             println!("Encrypted result: {}",res);
+
+            //drop pointer safely (after use)
+            let _ = CString::from_raw(result_ptr);
         }else{
             println!("Error");
         }
