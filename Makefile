@@ -8,7 +8,7 @@ zigcc:
 	zig cc src/cryptlibc.c src/main.c -o main
 
 #zig build system (compiles Zig -> executable)
-zigbuild:
+zigbind:
 	cd zigver && \
 	zig build-exe main.zig ../src/cryptlibc.c -I../src -lc &&\
 	./main

@@ -15,3 +15,9 @@ A C library for basic string encryption/decryption. C main binary compiled with 
 ### Instructions
 
 See `Makefile` for list of commands. Run in terminal with: `make COMMAND`
+
+Cleanup:
+
+```{bash}
+make rstidy zigtidy
+```
