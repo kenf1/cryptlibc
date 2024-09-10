@@ -1,11 +1,11 @@
 ## cryptlibc
 
-A C library for basic string encryption/decryption. C main binary compiled with [Zig](https://ziglang.org/).
+A C library for basic string encryption. Based on ROT13 algorithm. C main binary compiled with [Zig](https://ziglang.org/). Includes bindings to other languages (see [Bindings](#bindings) for full list).
 
-<br>
+### Usage
 
-> Proof of concept  
-> Not intended for production  
+- For learning purpose only
+- "virtually no cryptographic security" = not intended for production
 
 ### Bindings
 
