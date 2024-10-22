@@ -14,7 +14,7 @@ A C library for basic string encryption. Based on ROT13 algorithm. C main binary
 
 ### Instructions
 
-See `Makefile` for list of commands. Run in terminal with: `make COMMAND`
+See `Makefile` or run `make help` for list of available commands.
 
 Cleanup:
 
