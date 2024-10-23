@@ -8,11 +8,16 @@ int main(){
     int offset = 1;
 
     //encrypt
-    char* result = cryptlogic(input,reference,offset);
+    char* result = cryptlogic("encrypt",input,reference,offset);
     printf("Shifted: %s\n",result);
+
+    //decrypt
+    char* result1 = cryptlogic("decrypt",result,reference,offset);
+    printf("De-shifted: %s\n",result1);
 
     //free allocated memory
     free(result);
+    free(result1);
 
     return 0;
 }

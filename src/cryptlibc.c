@@ -2,8 +2,16 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-//backend logic (encrypt only)
-char* cryptlogic(const char* inputstr,const char* refstr,int offset){
+/*
+    backend logic (encrypt + decrypt)
+    version = "encrypt" or "decrypt"
+*/
+char* cryptlogic(
+    const char* version,
+    const char* inputstr,
+    const char* refstr,
+    int offset
+){
     int input_len = strlen(inputstr);
     int ref_len = strlen(refstr);
     char* result = (char*)malloc(input_len + 1);
@@ -30,7 +38,8 @@ char* cryptlogic(const char* inputstr,const char* refstr,int offset){
 
             //loop if overflow
             if(ref_index != -1){
-                int shift = (c - base + offset) % 26;
+                int shift = (c - base + (strcmp(version,"encrypt") ? offset : -offset) + 26) % 26;
+
                 result[i] = (char)(shift + base);
             }else{
                 result[i] = c;
