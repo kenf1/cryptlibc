@@ -8,7 +8,7 @@ int main(){
     int offset = 1;
 
     //encrypt
-    char* result = cryptlogic("encrypt",input,reference,offset);
+    char* result = cryptlogic("1encrypt",input,reference,offset);
     printf("Shifted: %s\n",result);
 
     //decrypt

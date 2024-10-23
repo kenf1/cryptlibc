@@ -1,6 +1,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 /*
     backend logic (encrypt + decrypt)
@@ -12,6 +13,13 @@ char* cryptlogic(
     const char* refstr,
     int offset
 ){
+    //version only "encrypt" or "decrypt" accepted as args
+    if(strcmp(version,"encrypt") != 0 && strcmp(version,"decrypt") != 0){
+        printf("Invalid input detected for `version` argument. Accepted values are `encrypt` or `decrypt`.\nPlease try again.\n");
+        return NULL;
+    }
+
+    //other args
     int input_len = strlen(inputstr);
     int ref_len = strlen(refstr);
     char* result = (char*)malloc(input_len + 1);
