@@ -19,5 +19,5 @@ See `Makefile` or run `make help` for list of available commands.
 Cleanup:
 
 ```{bash}
-make rstidy zigtidy
+make alltidy
 ```

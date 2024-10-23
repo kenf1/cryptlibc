@@ -28,5 +28,9 @@ zigtidydev: ##Remove Zig cache (.zig-cache)
 	cd Dev && \
 	rm -rf .zig-cache
 
+allbind: rsbind zigbind ##Compile both Rust & Zig versions
+
+alltidy: rstidy zigtidy zigtidydev ##Cleanup all
+
 test_decrypt: ##Test decrypt.c
 	zig cc src/decrypt.c -o src/decrypt

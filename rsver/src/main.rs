@@ -1,31 +1,35 @@
-use std::{
-    ffi::{c_char,c_int,CStr,CString},
-    ptr,
-    env,
-};
+use std::env::VarError;
+use std::{ptr,env};
+use std::ffi::{c_char,c_int,CStr,CString};
 use dotenv::dotenv;
 
 extern "C"{
     fn cryptlogic(
+        version: *const c_char,
         inputstr: *const c_char,
         refstr: *const c_char,
         offset: c_int
     ) -> *mut c_char;
 }
 
-fn main(){
-    //import KEY from .env
+//import env var
+fn load_env(env_var: String) -> Result<String,VarError>{
     dotenv().ok();
-    let key = env::var("KEY")
-        .unwrap();
+    let key = env::var(env_var);
 
-    let inputstr = CString::new("Hello from C!").unwrap();
-    let refstr = CString::new(& *key).unwrap(); //dereference
-    let offset = 2;
+    key
+}
 
+fn logic_wrapper(
+    version: CString,
+    inputstr: CString,
+    refstr: CString,
+    offset: i32
+){
     unsafe{
-        //pass args into C function (encrypt only)
+        //pass args into C function
         let result_ptr = cryptlogic(
+            version.as_ptr(),
             inputstr.as_ptr(),
             refstr.as_ptr(),
             offset
@@ -36,12 +40,41 @@ fn main(){
             let res = CStr::from_ptr(result_ptr)
                 .to_string_lossy()
                 .into_owned();
-            println!("Encrypted result: {}",res);
+            println!("{:?} result: {}",version,res);
 
             //drop pointer safely (after use)
             let _ = CString::from_raw(result_ptr);
         }else{
             println!("Error");
+        }
+    }
+}
+
+fn main(){
+    let key = load_env("KEY".to_string());
+
+    match key{
+        Ok(_) => {
+            let key = key.unwrap();
+
+            //encrypt
+            logic_wrapper(
+                CString::new("encrypt").unwrap(),
+                CString::new("Hello from C!").unwrap(),
+                CString::new(& *key).unwrap(),
+                2
+            );
+
+            //decrypt
+            logic_wrapper(
+                CString::new("decrypt").unwrap(),
+                CString::new("Fcjjm dpmk A!").unwrap(),
+                CString::new(& *key).unwrap(),
+                2
+            );
+        },
+        Err(_) => {
+            println!("Unable to import specified var from .env file")
         }
     }
 }
