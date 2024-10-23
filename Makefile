@@ -8,8 +8,7 @@ rsbind: ##Compile Rust version
 	cargo run
 
 zigcc: ##Compile C using Zig (GCC drop-in replacement)
-	zig cc src/cryptlibc.c src/main.c -o main
-
+	zig cc src/cryptlibc.c src/main.c -o src/main
 
 zigbind: ##Compile Zig version
 	cd zigver && \
@@ -28,3 +27,6 @@ zigtidy: ##Cleanup Zig files
 zigtidydev: ##Remove Zig cache (.zig-cache)
 	cd Dev && \
 	rm -rf .zig-cache
+
+test_decrypt: ##Test decrypt.c
+	zig cc src/decrypt.c -o src/decrypt
