@@ -19,17 +19,16 @@ pub fn main() !void {
     //decrypt (expect abc)
     const res1 = cryptlogic("decrypt", "zab", refstr, offset);
 
+    //free memory once cryptlogic completes
+    defer {
+        c.free(res0);
+        c.free(res1);
+    }
+
     //handle error
     if (res0 == null or res1 == null) {
         std.debug.print("Error: Memory allocation failed\n", .{});
         return;
-    }
-
-    //free memory once cryptlogic completes
-    //encrypt + decrypt
-    defer {
-        c.free(res0);
-        c.free(res1);
     }
 
     std.debug.print("Result:\n{s}\n{s}\n", .{ res0, res1 });

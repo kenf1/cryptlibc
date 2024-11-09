@@ -8,23 +8,21 @@ extern "C"{
         version: *const c_char,
         inputstr: *const c_char,
         refstr: *const c_char,
-        offset: c_int
+        offset: c_int,
     ) -> *mut c_char;
 }
 
 //import env var
 fn load_env(env_var: String) -> Result<String,VarError>{
     dotenv().ok();
-    let key = env::var(env_var);
-
-    key
+    env::var(env_var)
 }
 
 fn logic_wrapper(
     version: CString,
     inputstr: CString,
     refstr: CString,
-    offset: i32
+    offset: i32,
 ){
     unsafe{
         //pass args into C function
@@ -51,12 +49,8 @@ fn logic_wrapper(
 }
 
 fn main(){
-    let key = load_env("KEY".to_string());
-
-    match key{
-        Ok(_) => {
-            let key = key.unwrap();
-
+    match load_env("KEY".to_string()){
+        Ok(key) => {
             //encrypt
             logic_wrapper(
                 CString::new("encrypt").unwrap(),
@@ -74,7 +68,7 @@ fn main(){
             );
         },
         Err(_) => {
-            println!("Unable to import specified var from .env file")
+            println!("Unable to import specified var from .env file");
         }
     }
 }
