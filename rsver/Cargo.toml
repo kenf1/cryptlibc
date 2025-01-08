@@ -1,11 +1,11 @@
 [package]
 name = "rsver"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 
 [dependencies]
-cc = "1.1.31"
-dotenv = "0.15.0"
+cc = "1.2.7"
+dotenvy = "0.15.7"
 
 [build-dependencies]
-cc = "1.1.31"
+cc = "1.2.7"

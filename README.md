@@ -10,7 +10,7 @@ A C library for basic string encryption. Based on ROT13 algorithm. C main binary
 ### Bindings
 
 - Rust
-- Zig
+- Zig (v0.13.0)
 
 ### Instructions
 
