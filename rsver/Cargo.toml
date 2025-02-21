@@ -1,11 +1,12 @@
 [package]
 name = "rsver"
-version = "0.2.0"
-edition = "2021"
+version = "0.3.0"
+license = "GNU-GPL3"
+edition = "2024"
 
 [dependencies]
-cc = "1.2.7"
+cc = "1.2.15"
 dotenvy = "0.15.7"
 
 [build-dependencies]
-cc = "1.2.7"
+cc = "1.2.15"

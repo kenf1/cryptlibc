@@ -5,7 +5,7 @@ use std::{
     ptr,
 };
 
-extern "C" {
+unsafe extern "C" {
     fn cryptlogic(
         version: *const c_char,
         inputstr: *const c_char,

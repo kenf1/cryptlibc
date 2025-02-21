@@ -16,7 +16,9 @@
 				"formulahendry.code-runner"
 			],
 			"settings": {
-				"code-runner.enableAppInsights": false
+				"code-runner.enableAppInsights": false,
+				"zig.zls.enabled": "on",
+				"zig.version": "0.13.0"
 			}
 		}
 	}
