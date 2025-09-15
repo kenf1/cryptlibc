@@ -2,22 +2,34 @@
 #include <stdlib.h>
 #include "cryptlibc.h"
 
-int main() {
-    const char* input = "Hello, World!";
-    const char* reference = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-    int offset = 1;
+int main(void) {
+    CryptConfig cfg = {
+        .version = "encrypt",
+        .inputstr = "Hello, World!",
+        .refstr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890",
+        .offset = 1
+    };
 
     //encrypt
-    char* result = cryptlogic("1encrypt", input, reference, offset);
-    printf("Shifted: %s\n", result);
+    char* encrypted = cryptlogic(&cfg);
+    if (!encrypted) {
+        return EXIT_FAILURE;
+    }
+    printf("Encrypted: %s\n", encrypted);
 
-    //decrypt
-    char* result1 = cryptlogic("decrypt", result, reference, offset);
-    printf("De-shifted: %s\n", result1);
+    // reuse same config but switch mode (decrypt)
+    cfg.version = "decrypt";
+    cfg.inputstr = encrypted;
 
-    //free allocated memory
-    free(result);
-    free(result1);
+    char* decrypted = cryptlogic(&cfg);
+    if (!decrypted) {
+        free(encrypted);
+        return EXIT_FAILURE;
+    }
+    printf("Decrypted: %s\n", decrypted);
 
-    return 0;
+    free(encrypted);
+    free(decrypted);
+
+    return EXIT_SUCCESS;
 }

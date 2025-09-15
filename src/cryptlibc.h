@@ -1,11 +1,13 @@
 #ifndef CRYPTLIBC_H
 #define CRYPTLIBC_H
 
-char* cryptlogic(
-    const char* version,
-    const char* inputstr,
-    const char* refstr,
-    int offset
-);
+typedef struct {
+    const char* version;   // "encrypt" or "decrypt"
+    const char* inputstr;  // input string to process
+    const char* refstr;    // reference characters (alphabet, symbols, etc.)
+    int offset;            // shift amount
+} CryptConfig;
+
+char* cryptlogic(const CryptConfig* config);
 
 #endif
