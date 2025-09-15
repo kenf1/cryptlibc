@@ -5,8 +5,8 @@ license = "GNU-GPL3"
 edition = "2024"
 
 [dependencies]
-cc = "1.2.15"
+cc = "1.2.37"
 dotenvy = "0.15.7"
 
 [build-dependencies]
-cc = "1.2.15"
+cc = "1.2.37"
