@@ -40,10 +40,8 @@ zigtest: #Run test with zig
 guic: #Compile gui
 	cd vendor/raylib/src && make PLATFORM=PLATFORM_DESKTOP
 
-	gcc cryptlib_gui/clgui.c -Ivendor/raylib/src \
-	-Ivendor/raygui/src -Lvendor/raylib/src \
-	-lraylib -lGL -lm -lpthread -ldl -lrt -lX11 \
-	-o main
+	gcc cryptlib_gui/clgui.c -Ivendor/raylib/src -Ivendor/raygui/src -I../src \
+    -Lvendor/raylib/src -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o main
 
 clean: #Clean all
 	rm -rf ./src/test_cryptlibc ./main
