@@ -4,7 +4,7 @@
 #include <assert.h>
 #include "cryptlibc.h"
 
-// helper to free + assert string equality
+//helper to free + assert string equality
 void assert_result(const char* actual, const char* expected, const char* test_name) {
     if (strcmp(actual, expected) == 0) {
         printf("[PASS] %s\n", test_name);
