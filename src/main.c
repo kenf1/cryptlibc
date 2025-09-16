@@ -17,7 +17,7 @@ int main(void) {
     }
     printf("Encrypted: %s\n", encrypted);
 
-    // reuse same config but switch mode (decrypt)
+    //reuse same config but switch mode (decrypt)
     cfg.version = "decrypt";
     cfg.inputstr = encrypted;
 
