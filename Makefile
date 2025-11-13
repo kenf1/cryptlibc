@@ -45,3 +45,4 @@ guic: #Compile gui
 
 clean: #Clean all
 	rm -rf ./src/test_cryptlibc ./main
+	cd rsver && cargo clean
