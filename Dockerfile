@@ -1,4 +1,4 @@
-FROM ubuntu:25.10
+FROM ubuntu:26.04
 
 RUN apt-get update && apt-get install -y curl \
     xz-utils build-essential g++ make && \
