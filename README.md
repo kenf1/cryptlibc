@@ -9,25 +9,6 @@ A C library for basic string encryption. Based on ROT13 algorithm. C main binary
 
 ### Bindings
 
-- Rust
-- Zig (v0.13.0)
-
-### Instructions
-
-See `Makefile` or run `make help` for list of available commands.
-
-Cleanup:
-
-```{bash}
-make alltidy
-```
-
-### Changelog
-
-Removed raylib + raygui submodules
-
-```shell
-rm -rf vendor
-git rm -f --cached vendor/raylib
-git rm -f --cached vendor/raygui
-```
+- Rust (C FFI)
+- ~~Zig (v0.13.0)~~ (C FFI, no longer supported)
+- Go (dynamic library)

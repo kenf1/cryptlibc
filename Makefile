@@ -1,5 +1,4 @@
-.PHONY: rsbind zigcc zigbind rstidy zigtidy zigtidydev allbind alltidy \
-	gcctest zigtest guic clean
+.PHONY: rsbind zigcc dlib_linux dlib_mac dlib_win gobind gcctest zigtest guic clean
 
 rsbind: #Compile Rust version
 	cd rsver && cargo run
@@ -7,34 +6,24 @@ rsbind: #Compile Rust version
 zigcc: #Compile C using Zig (GCC drop-in replacement)
 	zig cc src/cryptlibc.c src/main.c -o src/main
 
-zigbind: #Compile Zig version
-	cd zigver && \
-	zig build-exe main.zig ../src/cryptlibc.c -I../src -lc && \
-	./main
+dlib_linux: #Compile as dynamic lib (linux)
+	cd src && gcc -shared -o libcryptlibc.so cryptlibc.c -fPIC
+
+dlib_mac: #Compile as dynamic lib (mac)
+	cd src && clang -dynamiclib -o libcryptlibc.dylib cryptlibc.c -arch arm64 -arch x86_64
+
+dlib_win: #Compile as dynamic lib (windows)
+	gcc -shared -o cryptlibc.dll cryptlibc.c -Wl,--out-implib,libcryptlibc.a
+
+gobind: #Run Go version
+	cp src/libcryptlibc.* gover/libcryptlibc.* && cd gover && go run .
 
 rstidy: #Cleanup Rust target folder
 	cd rsver && cargo clean
 
-zigtidy: #Cleanup Zig files
-	rm -rf .zig-cache && \
-	cd zigver && \
-	rm main main.o
-
-zigtidydev: #Remove Zig cache (.zig-cache)
-	cd Dev && rm -rf .zig-cache
-
-allbind: rsbind zigbind #Compile both Rust & Zig versions
-
-alltidy: rstidy zigtidy zigtidydev #Cleanup all
-
 gcctest: #Run test with gcc
 	cd src && \
 	gcc -o test_cryptlibc test_cryptlibc.c cryptlibc.c && \
-	./test_cryptlibc
-
-zigtest: #Run test with zig
-	cd src && \
-	zig cc -o test_cryptlibc test_cryptlibc.c cryptlibc.c && \
 	./test_cryptlibc
 
 guic: #Compile gui
@@ -44,5 +33,5 @@ guic: #Compile gui
     -Lvendor/raylib/src -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o main
 
 clean: #Clean all
-	rm -rf ./src/test_cryptlibc ./main
+	rm -rf ./src/test_cryptlibc ./main */.zig-cache */libcryptlibc.*
 	cd rsver && cargo clean
