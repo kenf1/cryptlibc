@@ -10,5 +10,5 @@ A C library for basic string encryption. Based on ROT13 algorithm. C main binary
 ### Bindings
 
 - Rust (C FFI)
-- ~~Zig (v0.13.0)~~
+- ~~Zig (v0.13.0)~~ (C FFI, no longer supported)
 - Go (dynamic library)
