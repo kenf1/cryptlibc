@@ -33,5 +33,5 @@ guic: #Compile gui
     -Lvendor/raylib/src -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o main
 
 clean: #Clean all
-	rm -rf ./src/test_cryptlibc ./main
+	rm -rf ./src/test_cryptlibc ./main */.zig-cache */libcryptlibc.*
 	cd rsver && cargo clean
